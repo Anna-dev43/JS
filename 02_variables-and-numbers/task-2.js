@@ -14,6 +14,7 @@
     console.log('Первое число меньше или равно', aNormalized <= bNormalized);
     console.log('Числа не равны', aNormalized !== bNormalized);
 
+    /*
     let a = 13.890123;
     let b = 2.891564;
     let precision = 2;
@@ -29,7 +30,9 @@
     console.log('Первое число больше или равно', aNormalized >= bNormalized);
     console.log('Первое число меньше или равно', aNormalized <= bNormalized);
     console.log('Числа не равны', aNormalized !== bNormalized);
+    */
 
+    /*
     let a = 13.890123;
     let b = 2.891564;
     let precision = 3;
@@ -45,3 +48,4 @@
     console.log('Первое число больше или равно', aNormalized >= bNormalized);
     console.log('Первое число меньше или равно', aNormalized <= bNormalized);
     console.log('Числа не равны', aNormalized !== bNormalized);
+    */

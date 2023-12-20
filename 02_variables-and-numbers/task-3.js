@@ -9,6 +9,7 @@
 
     console.log(min + numberInRange);
 
+    /*
     let n = 2;
     let m = 5;
 
@@ -19,7 +20,9 @@
     let min = Math.min(n, m);
 
     console.log(min + numberInRange);
+    */
 
+    /*
     let n = 100;
     let m = -5;
 
@@ -30,7 +33,9 @@
     let min = Math.min(n, m);
 
     console.log(min + numberInRange);
+    */
 
+    /*
     let n = -3;
     let m = -10;
 
@@ -41,4 +46,5 @@
     let min = Math.min(n, m);
 
     console.log(min + numberInRange);
+    */
 

@@ -9,6 +9,7 @@
 
     console.log(Math.sqrt(Math.pow(cathetus1, 2) * Math.pow(cathetus2, 2)));
 
+    /*
     let x1 = 10;
     let y1 = 5;
 
@@ -19,7 +20,9 @@
     let cathetus2 = Math.abs(y1 - y2);
 
     console.log(Math.sqrt(Math.pow(cathetus1, 2) * Math.pow(cathetus2, 2)));
+    */
 
+    /*
     let x1 = -5;
     let y1 = 8;
 
@@ -30,7 +33,9 @@
     let cathetus2 = Math.abs(y1 - y2);
 
     console.log(Math.sqrt(Math.pow(cathetus1, 2) * Math.pow(cathetus2, 2)));
+    */
 
+    /*
     let x1 = 5;
     let y1 = 8;
 
@@ -41,7 +46,9 @@
     let cathetus2 = Math.abs(y1 - y2);
 
     console.log(Math.sqrt(Math.pow(cathetus1, 2) * Math.pow(cathetus2, 2)));
+    */
 
+    /*
     let x1 = 8;
     let y1 = 1;
 
@@ -52,3 +59,4 @@
     let cathetus2 = Math.abs(y1 - y2);
 
     console.log(Math.sqrt(Math.pow(cathetus1, 2) * Math.pow(cathetus2, 2)));
+    */
