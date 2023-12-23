@@ -1,18 +1,16 @@
-let array = [];
+let arr = [];
 let count = 5;
+// let count = 7;
+// let count = 3;
 
-for (let i = 1; array.length < count; ++i) {
-  array.push(i);
-}
+  for (let i = 0; i < count; i++) {
+    arr.push(i)
+  }
 
-console.log (array);
-
-for (let i = 0; array.length < count; ++i) {
-  let j = 0;
-  array[j] = Math.round((Math.random() * Math.abs(count)));
-  temp = array[i];
-  array[i] = array[j];
-  array[j] = temp;
-}
-
-console.log (array);
+  for (let i = 0; i < arr.length; i++) {
+    let j = Math.floor(Math.random() * arr.length);
+    let temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp
+  }
+  console.log(arr)
