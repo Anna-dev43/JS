@@ -20,6 +20,7 @@ for (let i = 0; i < array.length; i++) {
 
 let n = 7;
 let array = [2,1,3];
+let index = 0;
 
 for (let i = 0; i < array.length; i++) {
   if (array[i] == n) {
