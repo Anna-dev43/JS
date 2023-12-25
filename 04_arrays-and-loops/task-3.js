@@ -19,16 +19,17 @@ for (let i = 0; i < array.length; i++) {
 }*/
 
 let n = 7;
-let array = [2,1,3];
-let index = 0;
+let array = [2,1,3,7,5];
+let index = -1;
 
 for (let i = 0; i < array.length; i++) {
-  if (array[i] == n) {
+  if (array[i] === n) {
+    index = i;
     break;
   }
 }
 
-if (index == 0) {
+if (index === -1) {
   console.log('Элемент не найден');
 } else {
   console.log('Индекс элемента', index);
