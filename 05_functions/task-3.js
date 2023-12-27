@@ -1,4 +1,4 @@
-let arr = [2,5,1,3,4];
+let StartArr = [2,5,1,3,4];
 // let arr = [12,33,3,44,100];
 // let arr = [0,1];
 
@@ -13,4 +13,4 @@ function arrSort(arr) {
   return arr
 }
 
-console.log(arrSort(arr))
+console.log(arrSort(StartArr))
