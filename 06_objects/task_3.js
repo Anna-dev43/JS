@@ -4,22 +4,14 @@ let objects = [
   { name: 'Пётр', surname: 'Петров' }
 ]
 
+let resultFilter = [];
 
-function filter(objects, prop, value){
-  let result = [];
-
-  for (let i = 0; i < objects.length - 1; i++) {
-
-    let entries = objects.entries(objects[i]);
-
-    for (let [prop, value] of entries) {
-      if (prop = 'name', value = 'Иван') {
-        filter.push(objects[i])
-        break
-      }
-    }
+function filter(arr, prop, value){
+  for (let item of arr) {
+    if (item[prop] === value)
+    resultFilter.push(item);
   }
-  return result
+  return resultFilter;
 }
 
 let result = filter(objects, 'name', 'Иван');
