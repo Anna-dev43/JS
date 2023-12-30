@@ -3,13 +3,15 @@ let objects = [
   { name: 'Иван', surname: 'Иванов' },
   { name: 'Пётр', surname: 'Петров' }
 ]
- 
+
+let resultFilter = [];
 
 function filter(arr, prop, value){
-  // Здесь решение задачи
-  // arr - массив объектов
-  // prop - свойство по которому производится фильтрация
-  // value - значение свойства по которому производится фильтрация
+  for (let item of arr) {
+    if (item[prop] === value)
+    resultFilter.push(item);
+  }
+  return resultFilter;
 }
 
 let result = filter(objects, 'name', 'Иван');
