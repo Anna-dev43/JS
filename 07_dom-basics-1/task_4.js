@@ -33,3 +33,10 @@
 
   createStudentsList(allStudents);
 
+let btn = document.createElement('button');
+document.body.append(btn);
+btn.textContent = 'Показать список';
+btn.addEventListener('click', function() {
+  getElement(allStudents);
+})
+
