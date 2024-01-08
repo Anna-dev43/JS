@@ -6,27 +6,30 @@
     { name: 'Антон', age: 7 }
   ];
 
-function getElement(studentInfo) {
-  let ulElement = document.createElement('ul');
+  function createStudentCard (student) {
+    let listItem = document.createElement('li');
+    let studentName = document.createElement('h2');
+    let studentYear = document.createElement('span');
 
-  for (let item of studentInfo) {
-    let liElement = document.createElement('li');
-    let h2Element = document.createElement('h2');
-    let spanElement = document.createElement('span');
+    studentName.textContent = student.name;
+    studentYear.textContent = `Возраст: ${student.age} лет`;
 
-    h2Element.textContent = `${item.name}`
-    spanElement.textContent = `возраст:${item.age}`
+    listItem.append(studentName, studentYear);
 
-    ulElement.append(liElement);
-    liElement.append(ulElement, spanElement);
+    return listItem;
   }
-  document.body.append(ulElement);
-}
 
-let btn = document.createElement('button');
-document.body.append(btn);
-btn.textContent = 'Показать список';
-btn.addEventListener('click', function() {
-  getElement(allStudents);
-})
+  function createStudentsList(listArr) {
+    let ul = document.createElement('ul');
+    ul.style = "list-style: none";
+
+    for (let obj of listArr) {
+      let item = createStudentCard(obj);
+      ul.append(item);
+    }
+
+    document.body.append(ul);
+  }
+
+  createStudentsList(allStudents);
 

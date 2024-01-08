@@ -1,4 +1,4 @@
-let studentObj = {
+let student = {
   name: 'Игорь',
   age: '17',
 };
@@ -8,12 +8,10 @@ function createStudentCard(studentObj) {
   let ageTag = document.createElement('span');
   let card = document.createElement('div')
 
-  card.prepend(ageTag);
-  card.prepend(nameTag);
-
   nameTag.textContent = studentObj.name;
-  ageTag.textContent = `Возраст: ${student.age} лет`;
+  ageTag.textContent = `Возраст: ${studentObj.age} лет`;
+  card.append(ageTag, nameTag);
 
   document.body.append(card);
 }
-createStudentCard(studentObj);
+createStudentCard(student);
