@@ -31,14 +31,13 @@ function createStudentsList(listArr) {
   document.body.append(list);
 }
 
-createStudentsList(allStudents);
-
 let btn = document.createElement('button');
-
-document.body.append(btn);
 btn.textContent = 'Показать список';
+document.body.append(btn);
 
-btn.onclick = getElement(allStudents)
+btn.addEventListener('click', function () {
+  createStudentsList(allStudents);
+});
 
 
 
