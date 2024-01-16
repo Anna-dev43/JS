@@ -7,11 +7,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список студентов</title>
 
-    <script src="main.js"></script>
+    <script defer type="module" src="main.js"></script>
 </head>
 
 <body>
-    <!-- Этап 1. Создайте верстку элементов, которые будут статичны (неизменны).  -->
+  <h1>Список студентов</h1>
+  <div class="forms">
+    <!-- HTML код формы для добавления студента -->
+    <form id="add-student-form" method="post">
+      <label class="add-form__cell">Фамилия:
+        <input type="text" id="surname" required>
+      </label>
+      <label class="add-form__cell">Имя:
+        <input type="text" id="name" required>
+      </label>
+      <label class="add-form__cell">Отчество:
+        <input type="text" id="lastname" required>
+      </label>
+      <label class="add-form__cell">Дата рождения:
+        <input type="text" id="birthday" min="1900-01-01" required>
+      </label>
+      <label class="add-form__cell">Год начало обучения:
+        <input type="text" id="startEducation" min="2000" required>
+      </label>
+      <label class="add-form__cell">Факультет:
+        <input type="text" id="faculty" required>
+      </label>
+    <button type="submit">Добавить студента</button>
+    </form>
+    <!-- HTML код формы для поиска студентов -->
+    <form id="filter-form">
+      <h2>Для быстрого поиска воспользуйтесь фильтром:</h2>
+      <label class="filter-form__line">По Ф.И.О.:
+        <input type="text" id="name-filter">
+      </label>
+      <label class="filter-form__line">По факультету:
+        <input type="text" id="faculter-filter">
+      </label>
+      <label class="filter-form__line">По году поступления:
+        <input type="text" id="start-educ-filter">
+      </label>
+      <label class="filter-form__line">По году окончанию:
+        <input type="text" id="finish-educ-filter">
+      </label>
+
+      <div class="filter-form__button">
+        <button id="filtres" type="submit">Применить фильтры</button>
+        <button id="reset-filter" type="reset">Сбросить фильтры</button>
+      </div>
+    </form>
+  </div>
+  <!-- HTML код таблицы со списком студентов -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th id="name-header">Ф.И.О. студента</th>
+        <th id="birthday-header">Дата рождения</th>
+        <th id="start__education-header">Год начала обучения</th>
+        <th id="faculty-header">Факультет</th>
+      </tr>
+    </thead>
+    <tbody id="students-list">
+      <tr>
+        <td>Фролов Игорь Сергеевич</td>
+        <td>1997.02.21</td>
+        <td>2020</td>
+        <td>Физика</td>
+      </tr>
+      <tr>
+        <td>Шевченко Алена Ивановна</td>
+        <td>2000.03.21</td>
+        <td>2019</td>
+        <td>Химия</td>
+      </tr>
+      <tr>
+        <td>Чапаксин Иван Владимирович</td>
+        <td>1999.09.09</td>
+        <td>2021</td>
+        <td>Химия</td>
+      </tr>
+      <tr>
+        <td>Миллер Ира Максимовна</td>
+        <td>2002.09.09</td>
+        <td>2022</td>
+        <td>Биология</td>
+      </tr>
+      <tr>
+        <td>Данилова Мария Сергеевна</td>
+        <td>1998.09.12</td>
+        <td>2020</td>
+        <td>Математика</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script defer type="module" src="index.html"></script>
 </body>
 
 </html>
