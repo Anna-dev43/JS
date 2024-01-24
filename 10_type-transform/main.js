@@ -1,117 +1,201 @@
-class Students {
-  constructor(name, surename, lastname, birthData, startYear, faculty) {
-    this.name = name;
-    this.surename = surename;
-    this.lastname = lastname;
-    this.birthData = birthData;
-    this.startYear = startYear;
-    this.faculty = faculty;
-  }
+// База данных
+let listData = [{
+  name: 'Олег',
+  surename: 'Иванович',
+  lastname: 'Мостин',
+  age: 18,
+  education: new Date(1992, 1, 21),
+  faculty: 'Физика'
+},
+{
+  name: 'Юлия',
+  surename: 'Александровна',
+  lastname: 'Воронина',
+  age: 21,
+  education: new Date(1995, 3, 15),
+  faculty: 'Биология'
+},
+{
+  name: 'Евгения',
+  surename: 'Анатольевна',
+  lastname: 'Ильина',
+  age: 18,
+  education: new Date(1900, 10, 3),
+  faculty: 'Химия'
+},
+]
 
-  get fio() {
-    return this.surename + " " + this.name + " " + this.lastname;
-  }
+let sortColumnFlag = 'fio',
+sortDirFlag = true
 
-  getStudPeriod() {
-    const currentTime = new Date();
-    return currentTime.getFullYear() - this.startYear;
-  }
+// Создание элементов
+const $app = document.getElementById('app'),
+$addForm = document.getElementById('add-form'),
+$nameInp = document.getElementById('add-form__name-inp'),
+$surenameInp = document.getElementById('add-form__surename-inp'),
+$lastnameInp = document.getElementById('add-form__lastname-inp'),
+$ageInp = document.getElementById('add-form__age-inp'),
+$educationInp = document.getElementById('add-form__education-inp')
+$facultyInp = document.getElementById('add-form__faculty-inp'),
+$sortFIOBtn = document.getElementById('sort__fio'),
+$sortAgeBtn = document.getElementById('sort__age'),
 
-  getBirthDataString() {
-    console.log(this.birthData) 
+$filterForm = document.getElementById('filter-form'),
+$fioFilterInp = document.getElementById('filter-form__fio-inp'),
+$facultyFilterInp = document.getElementById('filter-form__faculty-inp'),
 
-    const yyyy = this.birthData.getFullYear();
-    let mm = this.birthData.getMonth() + 1;
-    let dd = this.birthData.getDate();
+$table = document.createElement('table'),
+$tableHead = document.createElement('thead'),
+$tableBody = document.createElement('tbody'),
 
-    if (dd < 10) dd = "0" + dd;
-    if (mm < 10) mm = "0" + mm;
+$tableHeadTr = document.createElement('tr'),
+$tableHeadThFIO = document.createElement('th'),
+$tableHeadThAge = document.createElement('th'),
+$tableHeadThBirthYear = document.createElement('th'),
+$tableHeadThFaculty = document.createElement('th');
 
-    return dd + "." + mm + "." + yyyy;
-  }
+$table.classList.add('table', 'table-dark')
+
+$tableHeadThFIO.textContent = 'ФИО'
+$tableHeadThAge.textContent = 'Возраст'
+$tableHeadThBirthYear.textContent = 'Год рождения'
+$tableHeadThFaculty.textContent = 'Факультет'
+
+$tableHeadTr.append($tableHeadThFIO)
+$tableHeadTr.append($tableHeadThAge)
+$tableHeadTr.append($tableHeadThBirthYear)
+$tableHeadTr.append($tableHeadThFaculty)
+
+$tableHead.append($tableHeadTr)
+$table.append($tableHead)
+$table.append($tableBody)
+$app.append($table)
+
+// Создание Tr одного пользователя
+function createUserTr(oneUser) {
+const $userTr = document.createElement('tr'),
+  $userFIO = document.createElement('th'),
+  $userAge = document.createElement('th'),
+  $userBirthYear = document.createElement('th'),
+  $userFaculty = document.createElement('th');
+
+$userFIO.textContent = oneUser.fio
+$userAge.textContent = oneUser.age
+$userBirthYear.textContent = oneUser.birthYear
+$userFaculty.textContent = oneUser.faculty
+
+$userTr.append($userFIO)
+$userTr.append($userAge)
+$userTr.append($userBirthYear)
+$userTr.append($userFaculty)
+
+return $userTr
 }
 
-// Массив сотрудников
-const stud = [
-  new Students("Игорь", "Фролов", "Сергеевич", new Date(1992, 1, 21), 2015, "Физика"),
-  new Students("Алена", "Белых", "Юрьевна", new Date(1995, 3, 15), 2020, "Химия"),
-  new Students("Иван", "Ушаков", "Владимирович", new Date(1900, 10, 3), 2010, "Биология"),
-];
-
-const $studentsList = document.getElementById("students-list"),
-  $studentsListTHAll = document.querySelectorAll(".studentsTable th");
-
-let column = "fio",
-  columnDir = true;
-
-// Поличить TR сотрудника
-function newStudentTR(student) {
-  const $studentTR = document.createElement("tr"),
-    $fioTD = document.createElement("td"),
-    $birthDataTD = document.createElement("td"),
-    $startYearTD = document.createElement("td"),
-    $facultyTD = document.createElement("td");
-
-  $fioTD.textContent = student.fio;
-  $birthDataTD.textContent = student.getBirthDataString();
-  $startYearTD.textContent = student.startYear + " (" + student.getStudPeriod() + " лет)";
-  $facultyTD.textContent = student.faculty;
-
-  $studentTR.append($fioTD);
-  $studentTR.append($birthDataTD);
-  $studentTR.append($startYearTD);
-  $studentTR.append($facultyTD);
-
-  return $studentTR;
-}
-
-// получить сортировку массива по параметрам
-function getSortStudents(prop, dir) {
-  const studCopy = [...stud];
-  return studCopy.sort(function (studentA, studentB) {
-    if (!dir == false ? studentA[prop] < studentB[prop] : studentA[prop] > studentB[prop])
-      return -1;
-  });
-}
-
-// Отрисовать
-function render() {
-  let studCopy = [...stud];
-
-  studCopy = getSortStudents(column, columnDir);
-
-  $studentsList.innerHTML = "";
-
-  for (const student of studCopy) $studentsList.append(newStudentTR(student));
-}
-
-// События сотрировки
-$studentsListTHAll.forEach((elment) => {
-  elment.addEventListener("click", function () {
-    column = this.dataset.column;
-    columnDir = !columnDir;
-    render();
-  });
+// Фильтрация
+function filter(arr, prop, value) {
+return arr.filter(function(oneUser) {
+  if (oneUser[prop].includes(value.trim())) return true
 });
+}
+
+// Рендер
+function render(arrData) {
+$tableBody.innerHTML = '';
+let copyListData = [...arrData]
+
+// Подготовка
+for (const oneUser of copyListData) {
+  oneUser.fio = oneUser.name + ' ' + oneUser.surename + ' ' + oneUser.lastname
+  oneUser.birthYear = 2022 - oneUser.age
+}
+
+console.log(copyListData);
+// Сортировка
+copyListData = copyListData.sort(function(a, b) {
+  console.log(a, b);
+  let sort = a[sortColumnFlag] < b[sortColumnFlag]
+  if (sortDirFlag == false) sort = a[sortColumnFlag] > b[sortColumnFlag]
+  return sort ? -1 : 1
+})
+
+console.log(copyListData);
+
+// Фильтрация
+if ($fioFilterInp.value.trim() !== "") {
+  copyListData = filter(copyListData, 'fio', $fioFilterInp.value)
+}
+
+if ($facultyFilterInp.value.trim() !== "") {
+  copyListData = filter(copyListData, 'faculty', $facultyFilterInp.value)
+}
+
+// Отрисовка
+for (const oneUser of copyListData) {
+  const $newTr = createUserTr(oneUser)
+  $tableBody.append($newTr)
+}
+}
+
+render(listData)
 
 // Добавление
-document
-  .getElementById("add-student")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
+$addForm.addEventListener('submit', function(event) {
+event.preventDefault()
 
-    stud.push(
-      new Students(
-        document.getElementById("input-name").value,
-        document.getElementById("input-surename").value,
-        document.getElementById("input-lastname").value,
-        new Date(document.getElementById("input-birthData").value),
-        Number(document.getElementById("input-startYear").value),
-        document.getElementById("input-faculty").value
-      )
-    );
+// Валидация
+if ($nameInp.value.trim() == "") {
+  alert('Имя не введено!')
+  return
+}
 
-    render();
-  });
+if ($surenameInp.value.trim() == "") {
+  alert('Отчество не введено!')
+  return
+}
 
-render();
+if ($lastnameInp.value.trim() == "") {
+  alert('Фамилия не введена!')
+  return
+}
+
+if ($ageInp.value.trim() == "") {
+  alert('Возраст не введен!')
+  return
+}
+
+listData.push({
+  name: $nameInp.value.trim(),
+  surename: $surenameInp.value.trim(),
+  lastname: $lastnameInp.value.trim(),
+  age: parseInt($ageInp.value.trim()),
+  faculty: $facultyInp.value.trim()
+})
+
+render(listData)
+})
+
+// Клики сортировки
+$sortFIOBtn.addEventListener('click', function() {
+sortColumnFlag = 'fio'
+sortDirFlag = !sortDirFlag
+render(listData)
+})
+
+$sortAgeBtn.addEventListener('click', function() {
+sortColumnFlag = 'age'
+sortDirFlag = !sortDirFlag
+render(listData)
+})
+
+// Фильтр
+$filterForm.addEventListener('submit', function(event) {
+event.preventDefault()
+})
+
+$fioFilterInp.addEventListener('input', function() {
+render(listData)
+})
+$facultyFilterInp.addEventListener('input', function() {
+render(listData)
+})
