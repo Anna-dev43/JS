@@ -3,7 +3,7 @@ let listData = [{
   name: 'Олег',
   surename: 'Иванович',
   lastname: 'Мостин',
-  age: 18,
+  age: 22,
   education: new Date(1992, 1, 21),
   faculty: 'Физика'
 },
@@ -51,7 +51,6 @@ const $app = document.getElementById('app'),
       $tableHeadTr = document.createElement('tr'),
       $tableHeadThFIO = document.createElement('th'),
       $tableHeadThAge = document.createElement('th'),
-      $tableHeadThBirthYear = document.createElement('th'),
       $tableHeadThEducation = document.createElement('th'),
       $tableHeadThFaculty = document.createElement('th');
 
@@ -59,13 +58,12 @@ const $app = document.getElementById('app'),
 
       $tableHeadThFIO.textContent = 'ФИО'
       $tableHeadThAge.textContent = 'Возраст'
-      $tableHeadThBirthYear.textContent = 'Год рождения'
       $tableHeadThEducation.textContent = 'Начало обучения'
       $tableHeadThFaculty.textContent = 'Факультет'
 
       $tableHeadTr.append($tableHeadThFIO)
       $tableHeadTr.append($tableHeadThAge)
-      $tableHeadTr.append($tableHeadThBirthYear)
+
       $tableHeadTr.append($tableHeadThEducation)
       $tableHeadTr.append($tableHeadThFaculty)
 
