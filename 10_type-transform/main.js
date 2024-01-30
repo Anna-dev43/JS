@@ -1,26 +1,26 @@
 // База данных
 let listData = [{
   name: 'Олег',
-  surename: 'Иванович',
-  lastname: 'Мостин',
-  age: 22,
-  education: new Date(1992, 1, 21),
+  surname: 'Мостин',
+  lastname: 'Иванович',
+  birthday: '1992-01-01',
+  studyStart: 2016,
   faculty: 'Физика'
 },
 {
   name: 'Юлия',
-  surename: 'Александровна',
-  lastname: 'Воронина',
-  age: 21,
-  education: new Date(1995, 3, 15),
+  surname: 'Воронина',
+  lastname: 'Александровна',
+  birthday: '1995-03-15',
+  studyStart: 2017,
   faculty: 'Биология'
 },
 {
   name: 'Евгения',
-  surename: 'Анатольевна',
-  lastname: 'Ильина',
-  age: 18,
-  education: new Date(1900, 10, 3),
+  surname: 'Ильина',
+  lastname: 'Анатольевна',
+  birthday: '1998-10-03',
+  studyStart: 2018,
   faculty: 'Химия'
 },
 ]
@@ -32,7 +32,7 @@ sortDirFlag = true
 const $app = document.getElementById('app'),
       $addForm = document.getElementById('add-form'),
       $nameInp = document.getElementById('add-form__name-inp'),
-      $surenameInp = document.getElementById('add-form__surename-inp'),
+      $surnameInp = document.getElementById('add-form__surname-inp'),
       $lastnameInp = document.getElementById('add-form__lastname-inp'),
       $ageInp = document.getElementById('add-form__age-inp'),
       $educationInp = document.getElementById('add-form__education-inp'),
@@ -72,6 +72,32 @@ const $app = document.getElementById('app'),
       $table.append($tableBody)
       $app.append($table)
 
+function preparesStudentObj(student) {
+  const studentBirthDate = new Date(student.birthday);
+  const currentDate = new Date();
+
+  const studentBirthYear = studentBirthDate.getFullYear();
+  const currentYear = currentDate.getFullYear();
+  const studyEnd = Number(student.studyStart) + 4;
+
+  const course = currentYear < studyEnd ? `${currentYear - Number(student.studyStart)} курс` : 'Закончил';
+
+  return {
+    ...student,
+    fio: `${student.surname} ${student.name} ${student.lastname}`,
+    age: currentYear - studentBirthYear,
+    studyEnd,
+    course,
+    birthDate: studentBirthDate
+  }
+}
+
+function preparesStudentsArray() {
+  listData = listData.map((obj) => {
+    return preparesStudentObj(obj);
+  })
+}
+
 // Создание Tr одного пользователя
 function createUserTr(oneUser) {
 const $userTr = document.createElement('tr'),
@@ -81,8 +107,8 @@ const $userTr = document.createElement('tr'),
   $userFaculty = document.createElement('th');
 
 $userFIO.textContent = oneUser.fio
-$userAge.textContent = oneUser.age
-$userBirthYear.textContent = oneUser.birthYear
+$userAge.textContent = `${oneUser.birthDate.getDate()}.${oneUser.birthDate.getMonth()}.${oneUser.birthDate.getFullYear()} (${oneUser.age} лет)`
+$userBirthYear.textContent = `${oneUser.studyStart} - ${oneUser.studyEnd} (${oneUser.course})`
 $userFaculty.textContent = oneUser.faculty
 
 $userTr.append($userFIO)
@@ -105,13 +131,14 @@ function render(arrData) {
 $tableBody.innerHTML = '';
 let copyListData = [...arrData]
 
-// Подготовка
+/*// Подготовка
 for (const oneUser of copyListData) {
-  oneUser.fio = oneUser.name + ' ' + oneUser.surename + ' ' + oneUser.lastname
+  oneUser.fio = oneUser.name + ' ' + oneUser.surname + ' ' + oneUser.lastname
   oneUser.birthYear = 2022 - oneUser.age
-}
+}*/
 
 console.log(copyListData);
+
 // Сортировка
 copyListData = copyListData.sort(function(a, b) {
   console.log(a, b);
@@ -138,6 +165,7 @@ for (const oneUser of copyListData) {
 }
 }
 
+preparesStudentsArray();
 render(listData)
 
 // Добавление
@@ -150,7 +178,7 @@ if ($nameInp.value.trim() == "") {
   return
 }
 
-if ($surenameInp.value.trim() == "") {
+if ($surnameInp.value.trim() == "") {
   alert('Отчество не введено!')
   return
 }
@@ -165,13 +193,16 @@ if ($ageInp.value.trim() == "") {
   return
 }
 
-listData.push({
-  name: $nameInp.value.trim(),
-  surename: $surenameInp.value.trim(),
-  lastname: $lastnameInp.value.trim(),
-  age: parseInt($ageInp.value.trim()),
-  faculty: $facultyInp.value.trim()
-})
+const preparedStudent = preparesStudentObj({
+    name: $nameInp.value.trim(),
+    surname: $surnameInp.value.trim(),
+    lastname: $lastnameInp.value.trim(),
+    birthday: parseInt($ageInp.value.trim()),
+    studyStart: '',
+    faculty: $facultyInp.value.trim()
+});
+
+listData.push(preparedStudent)
 
 render(listData)
 })
