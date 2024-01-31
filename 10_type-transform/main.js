@@ -34,11 +34,11 @@ const $app = document.getElementById('app'),
       $nameInp = document.getElementById('add-form__name-inp'),
       $surnameInp = document.getElementById('add-form__surname-inp'),
       $lastnameInp = document.getElementById('add-form__lastname-inp'),
-      $ageInp = document.getElementById('add-form__age-inp'),
-      $educationInp = document.getElementById('add-form__education-inp'),
+      $birthdayInp = document.getElementById('add-form__birthday-inp'),
+      $studyStartInp = document.getElementById('add-form__studyStart-inp'),
       $facultyInp = document.getElementById('add-form__faculty-inp'),
       $sortFIOBtn = document.getElementById('sort__fio'),
-      $sortAgeBtn = document.getElementById('sort__age'),
+      $sortBirthdayBtn = document.getElementById('sort__birthday'),
 
       $filterForm = document.getElementById('filter-form'),
       $fioFilterInp = document.getElementById('filter-form__fio-inp'),
@@ -50,21 +50,21 @@ const $app = document.getElementById('app'),
 
       $tableHeadTr = document.createElement('tr'),
       $tableHeadThFIO = document.createElement('th'),
-      $tableHeadThAge = document.createElement('th'),
-      $tableHeadThEducation = document.createElement('th'),
+      $tableHeadThBirthday = document.createElement('th'),
+      $tableHeadThStudyStart = document.createElement('th'),
       $tableHeadThFaculty = document.createElement('th');
 
       $table.classList.add('table')
 
       $tableHeadThFIO.textContent = 'ФИО'
-      $tableHeadThAge.textContent = 'Возраст'
-      $tableHeadThEducation.textContent = 'Начало обучения'
+      $tableHeadThBirthday.textContent = 'Возраст'
+      $tableHeadThStudyStart.textContent = 'Начало обучения'
       $tableHeadThFaculty.textContent = 'Факультет'
 
       $tableHeadTr.append($tableHeadThFIO)
-      $tableHeadTr.append($tableHeadThAge)
+      $tableHeadTr.append($tableHeadThBirthday)
 
-      $tableHeadTr.append($tableHeadThEducation)
+      $tableHeadTr.append($tableHeadThStudyStart)
       $tableHeadTr.append($tableHeadThFaculty)
 
       $tableHead.append($tableHeadTr)
@@ -102,17 +102,17 @@ function preparesStudentsArray() {
 function createUserTr(oneUser) {
 const $userTr = document.createElement('tr'),
   $userFIO = document.createElement('th'),
-  $userAge = document.createElement('th'),
+  $userStudyStart = document.createElement('th'),
   $userBirthYear = document.createElement('th'),
   $userFaculty = document.createElement('th');
 
 $userFIO.textContent = oneUser.fio
-$userAge.textContent = `${oneUser.birthDate.getDate()}.${oneUser.birthDate.getMonth()}.${oneUser.birthDate.getFullYear()} (${oneUser.age} лет)`
+$userStudyStart.textContent = `${oneUser.birthDate.getDate()}.${oneUser.birthDate.getMonth()}.${oneUser.birthDate.getFullYear()} (${oneUser.age} лет)`
 $userBirthYear.textContent = `${oneUser.studyStart} - ${oneUser.studyEnd} (${oneUser.course})`
 $userFaculty.textContent = oneUser.faculty
 
 $userTr.append($userFIO)
-$userTr.append($userAge)
+$userTr.append($userStudyStart)
 $userTr.append($userBirthYear)
 $userTr.append($userFaculty)
 
@@ -130,14 +130,6 @@ return arr.filter(function(oneUser) {
 function render(arrData) {
 $tableBody.innerHTML = '';
 let copyListData = [...arrData]
-
-/*// Подготовка
-for (const oneUser of copyListData) {
-  oneUser.fio = oneUser.name + ' ' + oneUser.surname + ' ' + oneUser.lastname
-  oneUser.birthYear = 2022 - oneUser.age
-}*/
-
-console.log(copyListData);
 
 // Сортировка
 copyListData = copyListData.sort(function(a, b) {
@@ -188,7 +180,7 @@ if ($lastnameInp.value.trim() == "") {
   return
 }
 
-if ($ageInp.value.trim() == "") {
+if ($studyStartInp.value.trim() == "") {
   alert('Возраст не введен!')
   return
 }
@@ -197,7 +189,7 @@ const preparedStudent = preparesStudentObj({
     name: $nameInp.value.trim(),
     surname: $surnameInp.value.trim(),
     lastname: $lastnameInp.value.trim(),
-    birthday: parseInt($ageInp.value.trim()),
+    birthday: parseInt($birthdayInp.value.trim()),
     studyStart: '',
     faculty: $facultyInp.value.trim()
 });
@@ -214,8 +206,8 @@ sortDirFlag = !sortDirFlag
 render(listData)
 })
 
-$sortAgeBtn.addEventListener('click', function() {
-sortColumnFlag = 'age'
+$sortBirthdayBtn.addEventListener('click', function() {
+sortColumnFlag = 'birthday'
 sortDirFlag = !sortDirFlag
 render(listData)
 })
