@@ -189,8 +189,8 @@ const preparedStudent = preparesStudentObj({
     name: $nameInp.value.trim(),
     surname: $surnameInp.value.trim(),
     lastname: $lastnameInp.value.trim(),
-    birthday: parseInt($birthdayInp.value.trim()),
-    studyStart: '',
+    birthday: $birthdayInp.value,
+    studyStart: $studyStartInp.value.trim(),
     faculty: $facultyInp.value.trim()
 });
 
