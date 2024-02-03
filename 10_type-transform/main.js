@@ -37,12 +37,17 @@ const $app = document.getElementById('app'),
       $birthdayInp = document.getElementById('add-form__birthday-inp'),
       $studyStartInp = document.getElementById('add-form__studyStart-inp'),
       $facultyInp = document.getElementById('add-form__faculty-inp'),
+
       $sortFIOBtn = document.getElementById('sort__fio'),
       $sortBirthdayBtn = document.getElementById('sort__birthday'),
+      $sorFacultyBtn = document.getElementById('sort__faculty'),
+      $sortStudyStartBtn = document.getElementById('sort__studyStart'),
 
       $filterForm = document.getElementById('filter-form'),
       $fioFilterInp = document.getElementById('filter-form__fio-inp'),
       $facultyFilterInp = document.getElementById('filter-form__faculty-inp'),
+      $studyStartFilterInp = document.getElementById('filter-form__studyStart-inp'),
+      $finalStartFilterInp = document.getElementById('filter-form__finalStart-inp'),
 
       $table = document.createElement('table'),
       $tableHead = document.createElement('thead'),
@@ -128,7 +133,7 @@ return arr.filter(function(oneUser) {
 
 // Рендер
 function render(arrData) {
-$tableBody.innerHTML = '';
+  $tableBody.innerHTML = '';
 let copyListData = [...arrData]
 
 // Сортировка
@@ -144,6 +149,14 @@ console.log(copyListData);
 // Фильтрация
 if ($fioFilterInp.value.trim() !== "") {
   copyListData = filter(copyListData, 'fio', $fioFilterInp.value)
+}
+
+if ($studyStartFilterInp.value.trim() !== "") {
+  copyListData = filter(copyListData, 'faculty', $studyStartFilterInp.value)
+}
+
+if ($finalStartFilterInp.value.trim() !== "") {
+  copyListData = filter(copyListData, 'faculty', $finalStartFilterInp.value)
 }
 
 if ($facultyFilterInp.value.trim() !== "") {
@@ -164,27 +177,6 @@ render(listData)
 $addForm.addEventListener('submit', function(event) {
 event.preventDefault()
 
-// Валидация
-if ($nameInp.value.trim() == "") {
-  alert('Имя не введено!')
-  return
-}
-
-if ($surnameInp.value.trim() == "") {
-  alert('Отчество не введено!')
-  return
-}
-
-if ($lastnameInp.value.trim() == "") {
-  alert('Фамилия не введена!')
-  return
-}
-
-if ($studyStartInp.value.trim() == "") {
-  alert('Возраст не введен!')
-  return
-}
-
 const preparedStudent = preparesStudentObj({
     name: $nameInp.value.trim(),
     surname: $surnameInp.value.trim(),
@@ -197,6 +189,41 @@ const preparedStudent = preparesStudentObj({
 listData.push(preparedStudent)
 
 render(listData)
+})
+
+// Валидация
+function validation(form) {
+
+  function createError(input, text) {
+    const parent = input.parentNode;
+    const errorLabel = document.createElement('label')
+
+    errorLabel.classList.add('error-label')
+    errorLabel.textContent = text
+
+    parent.classList.add('error')
+
+    parent.append(errorLabel)
+  }
+
+  let result = true;
+  const allInput = form.querySelectorAll('input');
+
+  for (const input of allInput) {
+    if (input.value == "") {
+      console.log('Ошибка поля');
+      createError(input, 'Поле не заполнено!')
+      result = false
+    }
+  }
+}
+
+document.getElementById('add-form').addEventListener('submit', function(event) {
+  event.preventDefault()
+
+  if (validation(this) == true) {
+    alert('Форма проверенна успешно!')
+  }
 })
 
 // Клики сортировки
@@ -212,6 +239,18 @@ sortDirFlag = !sortDirFlag
 render(listData)
 })
 
+$sorFacultyBtn.addEventListener('click', function() {
+  sortColumnFlag = 'faculty'
+  sortDirFlag = !sortDirFlag
+  render(listData)
+})
+
+$sortStudyStartBtn.addEventListener('click', function() {
+  sortColumnFlag = 'studyStar'
+  sortDirFlag = !sortDirFlag
+  render(listData)
+})
+
 // Фильтр
 $filterForm.addEventListener('submit', function(event) {
 event.preventDefault()
@@ -220,6 +259,15 @@ event.preventDefault()
 $fioFilterInp.addEventListener('input', function() {
 render(listData)
 })
+
 $facultyFilterInp.addEventListener('input', function() {
 render(listData)
+})
+
+$finalStartFilterInp.addEventListener('input', function() {
+  render(listData)
+})
+
+$studyStartFilterInp.addEventListener('input', function() {
+  render(listData)
 })
