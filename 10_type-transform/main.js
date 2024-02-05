@@ -133,8 +133,7 @@ return arr.filter(function(oneUser) {
 
 // Рендер
 function render(arrData) {
-  $tableBody.innerHTML = '';
-let copyListData = [...arrData]
+  let copyListData = [...arrData]
 
 // Сортировка
 copyListData = copyListData.sort(function(a, b) {
@@ -177,6 +176,10 @@ render(listData)
 $addForm.addEventListener('submit', function(event) {
 event.preventDefault()
 
+if (!validation(this)) {
+  return
+}
+
 const preparedStudent = preparesStudentObj({
     name: $nameInp.value.trim(),
     surname: $surnameInp.value.trim(),
@@ -188,24 +191,27 @@ const preparedStudent = preparesStudentObj({
 
 listData.push(preparedStudent)
 
+$tableBody.innerHTML = '';
+
 render(listData)
+
+$addForm.reset();
 })
 
 // Валидация
+function createError(input, text) {
+  const parent = input.parentNode;
+  const errorLabel = document.createElement('label')
+
+  errorLabel.classList.add('error-label')
+  errorLabel.textContent = text
+
+  parent.classList.add('error')
+
+  parent.append(errorLabel)
+}
+
 function validation(form) {
-
-  function createError(input, text) {
-    const parent = input.parentNode;
-    const errorLabel = document.createElement('label')
-
-    errorLabel.classList.add('error-label')
-    errorLabel.textContent = text
-
-    parent.classList.add('error')
-
-    parent.append(errorLabel)
-  }
-
   let result = true;
   const allInput = form.querySelectorAll('input');
 
@@ -216,15 +222,9 @@ function validation(form) {
       result = false
     }
   }
+
+  return result;
 }
-
-document.getElementById('add-form').addEventListener('submit', function(event) {
-  event.preventDefault()
-
-  if (validation(this) == true) {
-    alert('Форма проверенна успешно!')
-  }
-})
 
 // Клики сортировки
 $sortFIOBtn.addEventListener('click', function() {
