@@ -47,7 +47,7 @@ const $app = document.getElementById('app'),
       $fioFilterInp = document.getElementById('filter-form__fio-inp'),
       $facultyFilterInp = document.getElementById('filter-form__faculty-inp'),
       $studyStartFilterInp = document.getElementById('filter-form__studyStart-inp'),
-      $finalStartFilterInp = document.getElementById('filter-form__finalStart-inp'),
+      $studyEndFilterInp = document.getElementById('filter-form__studyEnd-inp'),
 
       $table = document.createElement('table'),
       $tableHead = document.createElement('thead'),
@@ -126,44 +126,21 @@ return $userTr
 
 // Фильтрация
 function filter(arr, prop, value) {
+  if (value.trim === "") {
+    return arr;
+  }
+
 return arr.filter(function(oneUser) {
-  if (oneUser[prop].includes(value.trim())) return true
+  if (String(oneUser[prop]).includes(value.trim())) return true
 });
 }
 
 // Рендер
 function render(arrData) {
-  let copyListData = [...arrData]
-
-// Сортировка
-copyListData = copyListData.sort(function(a, b) {
-  console.log(a, b);
-  let sort = a[sortColumnFlag] < b[sortColumnFlag]
-  if (sortDirFlag == false) sort = a[sortColumnFlag] > b[sortColumnFlag]
-  return sort ? -1 : 1
-})
-
-console.log(copyListData);
-
-// Фильтрация
-if ($fioFilterInp.value.trim() !== "") {
-  copyListData = filter(copyListData, 'fio', $fioFilterInp.value)
-}
-
-if ($studyStartFilterInp.value.trim() !== "") {
-  copyListData = filter(copyListData, 'faculty', $studyStartFilterInp.value)
-}
-
-if ($finalStartFilterInp.value.trim() !== "") {
-  copyListData = filter(copyListData, 'faculty', $finalStartFilterInp.value)
-}
-
-if ($facultyFilterInp.value.trim() !== "") {
-  copyListData = filter(copyListData, 'faculty', $facultyFilterInp.value)
-}
+  $tableBody.textContent = '';
 
 // Отрисовка
-for (const oneUser of copyListData) {
+for (const oneUser of arrData) {
   const $newTr = createUserTr(oneUser)
   $tableBody.append($newTr)
 }
@@ -211,44 +188,71 @@ function createError(input, text) {
   parent.append(errorLabel)
 }
 
+function removeError(input) {
+  const parent = input.parentNode
+  const error = parent.querySelector('.error-label')
+  parent.classList.remove('error')
+  error?.remove()
+}
+
 function validation(form) {
   let result = true;
   const allInput = form.querySelectorAll('input');
 
   for (const input of allInput) {
-    if (input.value == "") {
+    if (input.value.trim() === "") {
       console.log('Ошибка поля');
       createError(input, 'Поле не заполнено!')
       result = false
+    } else {
+      removeError(input);
     }
   }
 
   return result;
 }
 
+function sortStudents(arrData) {
+  let copyListData = [...arrData]
+
+// Сортировка
+copyListData = copyListData.sort(function(a, b) {
+  console.log(a, b);
+  let sort = a[sortColumnFlag] < b[sortColumnFlag]
+  if (sortDirFlag == false) sort = a[sortColumnFlag] > b[sortColumnFlag]
+  return sort ? -1 : 1
+})
+
+return copyListData;
+}
+
 // Клики сортировки
 $sortFIOBtn.addEventListener('click', function() {
 sortColumnFlag = 'fio'
 sortDirFlag = !sortDirFlag
-render(listData)
+const sorteArr = sortStudents(listData)
+render(sorteArr)
 })
 
 $sortBirthdayBtn.addEventListener('click', function() {
 sortColumnFlag = 'birthday'
 sortDirFlag = !sortDirFlag
-render(listData)
+const sorteArr = sortStudents(listData)
+render(sorteArr)
 })
 
 $sorFacultyBtn.addEventListener('click', function() {
   sortColumnFlag = 'faculty'
   sortDirFlag = !sortDirFlag
-  render(listData)
+  const sorteArr = sortStudents(listData)
+  render(sorteArr)
 })
 
 $sortStudyStartBtn.addEventListener('click', function() {
   sortColumnFlag = 'studyStar'
   sortDirFlag = !sortDirFlag
-  render(listData)
+  const sorteArr = sortStudents(listData)
+  render(sorteArr)
 })
 
 // Фильтр
@@ -257,17 +261,21 @@ event.preventDefault()
 })
 
 $fioFilterInp.addEventListener('input', function() {
-render(listData)
+    const filtereData = filter(listData, 'fio', $fioFilterInp.value)
+    render(filtereData)
 })
 
 $facultyFilterInp.addEventListener('input', function() {
-render(listData)
+    const filtereData = filter(listData, 'faculty', $facultyFilterInp.value)
+    render(filtereData)
 })
 
-$finalStartFilterInp.addEventListener('input', function() {
-  render(listData)
+$studyEndFilterInp.addEventListener('input', function() {
+    const filtereData = filter(listData, 'studyEnd', $studyEndFilterInp.value)
+    render(filtereData)
 })
 
 $studyStartFilterInp.addEventListener('input', function() {
-  render(listData)
+    const filtereData = filter(listData, 'studyStart', $studyStartFilterInp.value)
+    render(filtereData)
 })
