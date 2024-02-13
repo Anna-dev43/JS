@@ -1,4 +1,6 @@
-(function () {
+import { studentManager } from './student.js';
+
+document.addEventListener('DOMContentLoaded', async function () {
 
   // База данных
   let listData = [
@@ -179,6 +181,59 @@
     $addForm.reset();
   });
 
+  
+  // Проверка списка на сервере
+  
+  async function loadStudentList() {
+    const response = await fetch('http://localhost:3000/api/students');
+    const data = await response.json();
+    console.log(data);
+    return data;
+  }
+
+  // Функция клика кнопки, инпутов, а так же создания нового студента и добавления его в массив
+
+  createButton.onclick = async () => {
+    let inp = document.getElementById('year');
+    let date = inp.valueAsDate;
+    let dateNew = date.getFullYear();
+
+    let newStudentData = {
+      surname: `${createSurnameInp.value}`,
+      name: `${createNameInp.value}`,
+      lastname: `${createPatronymicInp.value}`,
+      birthday: `${dateNew} (${2023 - dateNew} лет)`,
+      studyStart: `${Number(createStartYearInp.value)}-${Number(createStartYearInp.value) + 4}`,
+      faculty: `${createFacultyInp.value}`,
+    };
+
+    // Функция сохранения объекта на сервер
+
+    if (!validateStudent(newStudentData))
+      return;
+    const serverData = await fetch('http://localhost:3000/api/students', {
+      method: 'POST',
+      body: JSON.stringify({
+        surname: `${createSurnameInp.value}`,
+        name: `${createNameInp.value}`,
+        lastname: `${createPatronymicInp.value}`,
+        birthday: `${dateNew} (${2023 - dateNew} лет)`,
+        studyStart: `${Number(createStartYearInp.value)}-${Number(createStartYearInp.value) + 4}`,
+        faculty: `${createFacultyInp.value}`
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const studentData = await serverData.json();
+
+    studentManager.addStudent(studentData);
+    console.log('Total students: ' + studentManager.list.length);
+
+    clearInputs();
+    renderTable();
+  }
+
   // Валидация
   function createError(input, text) {
     const parent = input.parentNode;
@@ -287,4 +342,9 @@
     );
     render(filtereData);
   });
+
+  const dataList = await loadStudentList();
+  studentManager.addStudents(dataList);
+  renderTable(studentManager.list);
+  window.studentManager = studentManager;
 })();
