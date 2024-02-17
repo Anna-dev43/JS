@@ -58,6 +58,7 @@ const $app = document.getElementById('app'),
       $tableHeadThBirthday = document.createElement('th'),
       $tableHeadThStudyStart = document.createElement('th'),
       $tableHeadThFaculty = document.createElement('th');
+      $tableHeadThButton = document.createElement('th');
 
       $table.classList.add('table')
 
@@ -65,12 +66,14 @@ const $app = document.getElementById('app'),
       $tableHeadThBirthday.textContent = 'Возраст'
       $tableHeadThStudyStart.textContent = 'Начало обучения'
       $tableHeadThFaculty.textContent = 'Факультет'
+      $tableHeadThButton.textContent = 'Удаление студента'
 
       $tableHeadTr.append($tableHeadThFIO)
       $tableHeadTr.append($tableHeadThBirthday)
 
       $tableHeadTr.append($tableHeadThStudyStart)
       $tableHeadTr.append($tableHeadThFaculty)
+      $tableHeadTr.append($tableHeadThButton)
 
       $tableHead.append($tableHeadTr)
       $table.append($tableHead)
@@ -103,10 +106,9 @@ function preparesStudentsArray() {
   })
 }
 
-
 // проверка списка на сервере
 async function loadStudentList() {
-  const response = await fetch('http://localhost:3000');
+  const response = await fetch('http://localhost:3000/api/students');
   const data = await response.json();
   console.log(data);
   return data;
@@ -115,11 +117,11 @@ async function loadStudentList() {
 // Создание Tr одного пользователя
 function createUserTr(oneUser) {
 const $userTr = document.createElement('tr'),
-  $userFIO = document.createElement('th'),
-  $userStudyStart = document.createElement('th'),
-  $userBirthYear = document.createElement('th'),
-  $userFaculty = document.createElement('th');
-  $userButton = document.createElement('button');
+  $userFIO = document.createElement('td'),
+  $userStudyStart = document.createElement('td'),
+  $userBirthYear = document.createElement('td'),
+  $userFaculty = document.createElement('td');
+  $userButton = document.createElement('td');
 
 $userFIO.textContent = oneUser.fio
 $userStudyStart.textContent = `${oneUser.birthDate.getDate()}.${oneUser.birthDate.getMonth()}.${oneUser.birthDate.getFullYear()} (${oneUser.age} лет)`
@@ -140,6 +142,20 @@ $userButton.addEventListener('click', function() {
     $userTr.remove();
   }
 })
+
+// Функция удаления студента
+let buttonTd = document.createElement('button');
+
+buttonTd.textContent = 'Удалить';
+buttonTd.classList.add('btn_delete');
+
+  buttonTd.onclick = () => {
+    fetch(`http://localhost:3000/api/students/1234567890`, {
+      method: 'DELETE',
+    });
+    studentManager.removeStudent(newStudent);
+    renderTable();
+  };
 
 return $userTr
 }
@@ -204,7 +220,7 @@ createButton.onclick = async () => {
 // функция сохранения объекта на сервер
 if (!validateStudent(newStudentData))
       return;
-    const serverData = await fetch('http://localhost:3000', {
+    const serverData = await fetch('http://localhost:3000/api/students', {
       method: 'POST',
       body: JSON.stringify({
         surname: `${surnameInp.value}`,
