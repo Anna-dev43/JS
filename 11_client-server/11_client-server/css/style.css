@@ -37,3 +37,7 @@ body {
   margin-bottom: 5px;
 }
 
+.btn-class {
+  cursor: pointer;
+}
+

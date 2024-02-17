@@ -123,6 +123,8 @@ const $userTr = document.createElement('tr'),
   $userFaculty = document.createElement('td');
   $userButton = document.createElement('td');
 
+  $userTr.classList.add('class')
+
 $userFIO.textContent = oneUser.fio
 $userStudyStart.textContent = `${oneUser.birthDate.getDate()}.${oneUser.birthDate.getMonth()}.${oneUser.birthDate.getFullYear()} (${oneUser.age} лет)`
 $userBirthYear.textContent = `${oneUser.studyStart} - ${oneUser.studyEnd} (${oneUser.course})`
@@ -135,7 +137,7 @@ $userTr.append($userBirthYear)
 $userTr.append($userFaculty)
 $userTr.append($userButton)
 
-$userButton.classList.add('btn');
+$userButton.classList.add('btn-class');
 $userButton.textContent = 'Удалить';
 $userButton.addEventListener('click', function() {
   if (confirm('Вы уверены?')) {
