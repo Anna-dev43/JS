@@ -151,7 +151,7 @@ let buttonTd = document.createElement('button');
 buttonTd.textContent = 'Удалить';
 buttonTd.classList.add('btn_delete');
 
-  buttonTd.onclick = () => {
+  buttonTd.addEventListener = () => {
     fetch(`http://localhost:3000/api/students/1234567890`, {
       method: 'DELETE',
     });
@@ -184,8 +184,13 @@ for (const oneUser of arrData) {
 }
 }
 
-preparesStudentsArray();
-render(listData)
+async function getStudentTable() {
+  listData = await loadStudentList();
+  preparesStudentsArray();
+  render(listData)
+}
+
+getStudentTable();
 
 // Добавление
 $addForm.addEventListener('submit', function(event) {
