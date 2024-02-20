@@ -178,12 +178,13 @@ return arr.filter(function(oneUser) {
 // Рендер
 function render(arrData) {
   $tableBody.textContent = '';
+  console.log(arrData)
+  // Отрисовка
+  for (const oneUser of arrData) {
+    const $newTr = createUserTr(oneUser)
+    $tableBody.append($newTr)
+  }
 
-// Отрисовка
-for (const oneUser of arrData) {
-  const $newTr = createUserTr(oneUser)
-  $tableBody.append($newTr)
-}
 }
 
 async function getStudentTable() {
