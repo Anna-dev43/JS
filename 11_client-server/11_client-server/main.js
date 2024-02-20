@@ -38,6 +38,8 @@ const $app = document.getElementById('app'),
       $studyStartInp = document.getElementById('add-form__studyStart-inp'),
       $facultyInp = document.getElementById('add-form__faculty-inp'),
 
+      $createButton = document.getElementById('createButton');
+
       $sortFIOBtn = document.getElementById('sort__fio'),
       $sortBirthdayBtn = document.getElementById('sort__birthday'),
       $sorFacultyBtn = document.getElementById('sort__faculty'),
@@ -116,50 +118,50 @@ async function loadStudentList() {
 
 // Создание Tr одного пользователя
 function createUserTr(oneUser) {
-const $userTr = document.createElement('tr'),
-  $userFIO = document.createElement('td'),
-  $userStudyStart = document.createElement('td'),
-  $userBirthYear = document.createElement('td'),
-  $userFaculty = document.createElement('td');
-  $userButton = document.createElement('td');
+  const $userTr = document.createElement('tr'),
+    $userFIO = document.createElement('td'),
+    $userStudyStart = document.createElement('td'),
+    $userBirthYear = document.createElement('td'),
+    $userFaculty = document.createElement('td');
+    $userButton = document.createElement('td');
 
-  $userTr.classList.add('class')
+    $userTr.classList.add('class')
 
-$userFIO.textContent = oneUser.fio
-$userStudyStart.textContent = `${oneUser.birthDate.getDate()}.${oneUser.birthDate.getMonth()}.${oneUser.birthDate.getFullYear()} (${oneUser.age} лет)`
-$userBirthYear.textContent = `${oneUser.studyStart} - ${oneUser.studyEnd} (${oneUser.course})`
-$userFaculty.textContent = oneUser.faculty
-$userButton.textContent = oneUser.button
+  $userFIO.textContent = oneUser.fio
+  $userStudyStart.textContent = `${oneUser.birthDate.getDate()}.${oneUser.birthDate.getMonth()}.${oneUser.birthDate.getFullYear()} (${oneUser.age} лет)`
+  $userBirthYear.textContent = `${oneUser.studyStart} - ${oneUser.studyEnd} (${oneUser.course})`
+  $userFaculty.textContent = oneUser.faculty
+  $userButton.textContent = oneUser.button
 
-$userTr.append($userFIO)
-$userTr.append($userStudyStart)
-$userTr.append($userBirthYear)
-$userTr.append($userFaculty)
-$userTr.append($userButton)
+  $userTr.append($userFIO)
+  $userTr.append($userStudyStart)
+  $userTr.append($userBirthYear)
+  $userTr.append($userFaculty)
+  $userTr.append($userButton)
 
-$userButton.classList.add('btn-class');
-$userButton.textContent = 'Удалить';
-$userButton.addEventListener('click', function() {
-  if (confirm('Вы уверены?')) {
-    $userTr.remove();
-  }
-})
+  $userButton.classList.add('btn-class');
+  $userButton.textContent = 'Удалить';
+  $userButton.addEventListener('click', function() {
+    if (confirm('Вы уверены?')) {
+      $userTr.remove();
+    }
+  })
 
-// Функция удаления студента
-let buttonTd = document.createElement('button');
+  // Функция удаления студента
+  let buttonTd = document.createElement('button');
 
-buttonTd.textContent = 'Удалить';
-buttonTd.classList.add('btn_delete');
+  buttonTd.textContent = 'Удалить';
+  buttonTd.classList.add('btn_delete');
 
-  buttonTd.addEventListener = () => {
-    fetch(`http://localhost:3000/api/students/1234567890`, {
-      method: 'DELETE',
-    });
-    studentManager.removeStudent(newStudent);
-    renderTable();
-  };
+    buttonTd.addEventListener = () => {
+      fetch(`http://localhost:3000/api/students/1234567890`, {
+        method: 'DELETE',
+      });
+      studentManager.removeStudent(newStudent);
+      renderTable();
+    };
 
-return $userTr
+  return $userTr
 }
 
 // Фильтрация
@@ -194,48 +196,39 @@ getStudentTable();
 
 // Добавление
 $addForm.addEventListener('submit', function(event) {
-event.preventDefault()
+  event.preventDefault()
 
-if (!validation(this)) {
+  if (!validation(this)) {
   return
-}
+  }
 
-const preparedStudent = preparesStudentObj({
-    name: $nameInp.value.trim(),
-    surname: $surnameInp.value.trim(),
-    lastname: $lastnameInp.value.trim(),
-    birthday: $birthdayInp.value,
-    studyStart: $studyStartInp.value.trim(),
-    faculty: $facultyInp.value.trim()
-});
+  // Функция клика кнопки, инпутов, а так же создания нового студента и добавления его в массив
+  $createButton.addEventListener = async () => {
+    let inp = document.getElementById('year');
+    let date = inp.valueAsDate;
+    let dateNew = date.getFullYear();
 
-// Функция клика кнопки, инпутов, а так же создания нового студента и добавления его в массив
-createButton.onclick = async () => {
-  let inp = document.getElementById('year');
-  let date = inp.valueAsDate;
-  let dateNew = date.getFullYear();
+    let newStudentData = {
+      surname: `${$surnameInp.value}`,
+      name: `${$nameInp.value}`,
+      lastname: `${$lastnameInp.value}`,
+      birthday: `${dateNew} (${2023 - dateNew} лет)`,
+      studyStart: `${Number($studyStartInp.value)}-${Number($studyStartInp.value) + 4}`,
+      faculty: `${$facultyInp.value}`,
+    };
 
-  let newStudentData = {
-    surname: `${createSurnameInp.value}`,
-    name: `${createNameInp.value}`,
-    lastname: `${createPatronymicInp.value}`,
-    birthday: `${dateNew} (${2023 - dateNew} лет)`,
-    studyStart: `${Number(createStartYearInp.value)}-${Number(createStartYearInp.value) + 4}`,
-    faculty: `${createFacultyInp.value}`,
-  };
-
-// функция сохранения объекта на сервер
-if (!validateStudent(newStudentData))
+    // функция сохранения объекта на сервер
+    if (!validateStudent(newStudentData))
       return;
     const serverData = await fetch('http://localhost:3000/api/students', {
       method: 'POST',
       body: JSON.stringify({
-        surname: `${surnameInp.value}`,
-        name: `${nameInp.value}`,
-        lastname: `${lastnameInp.value}`,
+        surname: `${$surnameInp.value}`,
+        name: `${$nameInp.value}`,
+        lastname: `${$lastnameInp.value}`,
         birthday: `${dateNew} (${2023 - dateNew} лет)`,
-        studyStart: `${Number(studyStartInp.value)}-${Number(studyStartInp.value) + 4}`,
-        faculty: `${facultyInp.value}`
+        studyStart: `${Number($studyStartInp.value)}-${Number($studyStartInp.value) + 4}`,
+        faculty: `${$facultyInp.value}`
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -244,15 +237,27 @@ if (!validateStudent(newStudentData))
 
     const studentData = await serverData.json();
     studentManager.addStudent(studentData);
+
+    console.log('Total students: ' + studentManager.list.length);
+
+    clearInputs();
+    renderTable();
+
+    function clearInputs() {
+      $nameInp.value = '';
+      $surnameInp.value = '';
+      $lastnameInp.value = '';
+      $studyStartInp.value = '';
+      $birthdayInp.value = '';
+      $facultyInp.value = '';
+    };
   }
 
-listData.push(preparedStudent)
+  $tableBody.innerHTML = '';
 
-$tableBody.innerHTML = '';
+  render(listData)
 
-render(listData)
-
-$addForm.reset();
+  $addForm.reset();
 })
 
 // Валидация
