@@ -92,8 +92,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const course =
       currentYear < studyEnd
-        ? `${currentYear - Number(student.studyStart)} курс`
-        : "Закончил";
+        ? `${currentYear - Number(student.studyStart)} курс` : "Закончил";
 
     return {
       ...student,
@@ -126,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       $userStudyStart = document.createElement("td"),
       $userBirthYear = document.createElement("td"),
       $userFaculty = document.createElement("td");
-    $userButton = document.createElement("td");
+      $userButton = document.createElement("td");
 
     $userTr.classList.add("class");
 
@@ -147,6 +146,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     $userButton.addEventListener("click", function () {
       if (confirm("Вы уверены?")) {
         $userTr.remove();
+        fetch(`http://localhost:3000/api/students/${oneUser.id}`, {
+        method: "DELETE",
+      })
       }
     });
 
@@ -156,13 +158,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     buttonTd.textContent = "Удалить";
     buttonTd.classList.add("btn_delete");
 
-    buttonTd.addEventListener = () => {
-      fetch(`http://localhost:3000/api/students/1234567890`, {
-        method: "DELETE",
-      });
-      newStudentData.removeStudent(newStudent);
-      renderTable();
-    };
+    buttonTd.addEventListener('click', function() {
+
+      const index = listData.findIndex((obj) => obj.id === oneUser.id);
+      listData.splice(index, 1)
+
+      render(listData);
+    });
 
     return $userTr;
   }
@@ -197,8 +199,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   getStudentTable();
 
+  function clearInputs() {
+    $nameInp.value = "";
+    $surnameInp.value = "";
+    $lastnameInp.value = "";
+    $studyStartInp.value = "";
+    $birthdayInp.value = "";
+    $facultyInp.value = "";
+  }
+
   // Добавление
-  $addForm.addEventListener("submit", function (event) {
+  $addForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     if (!validation(this)) {
@@ -206,60 +217,31 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // Функция клика кнопки, инпутов, а так же создания нового студента и добавления его в массив
-    $createButton.addEventListener = async () => {
-      let inp = document.getElementById("year");
-      let date = inp.valueAsDate;
-      let dateNew = date.getFullYear();
-
       let newStudentData = {
         surname: `${$surnameInp.value}`,
         name: `${$nameInp.value}`,
         lastname: `${$lastnameInp.value}`,
-        birthday: `${dateNew} (${2023 - dateNew} лет)`,
-        studyStart: `${Number($studyStartInp.value)}-${
-          Number($studyStartInp.value) + 4
-        }`,
+        birthday: `${$birthdayInp.value}`,
+        studyStart: Number($studyStartInp.value),
         faculty: `${$facultyInp.value}`,
-      };
+      }
 
       // функция сохранения объекта на сервер
-      if (!validateStudent(newStudentData)) return;
       const serverData = await fetch("http://localhost:3000/api/students", {
         method: "POST",
-        body: JSON.stringify({
-          surname: `${$surnameInp.value}`,
-          name: `${$nameInp.value}`,
-          lastname: `${$lastnameInp.value}`,
-          birthday: `${dateNew} (${2023 - dateNew} лет)`,
-          studyStart: `${Number($studyStartInp.value)}-${
-            Number($studyStartInp.value) + 4
-          }`,
-          faculty: `${$facultyInp.value}`,
-        }),
+        body: JSON.stringify(newStudentData),
         headers: {
           "Content-Type": "application/json",
         },
       });
 
       const studentData = await serverData.json();
-      newStudentData.addStudent(studentData);
-
-      console.log("Total students: " + newStudentData.list.length);
+      listData.push(preparesStudentObj(studentData));
 
       clearInputs();
-      renderTable();
+      render(listData);
 
-      function clearInputs() {
-        $nameInp.value = "";
-        $surnameInp.value = "";
-        $lastnameInp.value = "";
-        $studyStartInp.value = "";
-        $birthdayInp.value = "";
-        $facultyInp.value = "";
-      }
-    };
-
-    $tableBody.innerHTML = "";
+      $tableBody.innerHTML = "";
 
     render(listData);
 
@@ -367,37 +349,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   $studyStartFilterInp.addEventListener("input", function () {
-    const filtereData = filter(
-      listData,
-      "studyStart",
-      $studyStartFilterInp.value
-    );
+    const filtereData = filter(listData, "studyStart", $studyStartFilterInp.value);
     render(filtereData);
   });
-
-  function searchStudents() {
-    const query = {};
-    if ($fioFilterInp.value !== '') {
-      query.surname = $fioFilterInp.value;
-    }
-    if ($facultyFilterInp.value !== '') {
-      query.faculty = $facultyFilterInp.value;
-    }
-    if ($studyStartFilterInp.value !== '') {
-      query.birthday = $studyStartFilterInp.value;
-    }
-    if ($studyEndFilterInp.value !== '') {
-      query.studyStart = $studyEndFilterInp.value;
-    }
-    newStudentData.searchStudents(query);
-    renderTable(newStudentData.searchList);
-  }
-
-  [$fioFilterInp, $facultyFilterInp, $studyStartFilterInp, $studyEndFilterInp]
-    .forEach(filter => filter.oninput = searchStudents);
-
-  const dataList = await loadStudentList();
-  newStudentData.addStudents(dataList);
-  renderTable(newStudentData.list);
-  window.newStudentData = newStudentData;
 });
