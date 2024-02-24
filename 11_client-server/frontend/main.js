@@ -150,6 +150,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         method: "DELETE",
       })
       }
+
+      const index = listData.findIndex((obj) => obj.id === oneUser.id);
+      listData.splice(index, 1)
     });
 
     // Функция удаления студента
@@ -159,9 +162,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     buttonTd.classList.add("btn_delete");
 
     buttonTd.addEventListener('click', function() {
-
-      const index = listData.findIndex((obj) => obj.id === oneUser.id);
-      listData.splice(index, 1)
 
       render(listData);
     });
